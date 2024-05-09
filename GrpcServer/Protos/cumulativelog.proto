@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "gRPCServer";
+
+package cumulativeLog;
+
+// CumulativeLog service definition.
+service CumulativeLog {
+  rpc Insert(InsertRequest) returns (LogResponse);
+  rpc Add(AddRequest) returns (LogResponse);
+}
+
+// Messages for CumulativeLog service
+message InsertRequest {
+  string text = 1;
+  int32 index = 2;
+}
+
+message AddRequest {
+  string text = 1;
+}
+
+message LogResponse {
+  string text = 1;
+}
