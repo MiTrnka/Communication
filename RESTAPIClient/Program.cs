@@ -1,7 +1,7 @@
 ﻿using RESTAPIClient;
 using System.Net.Http.Json;
 
-//Vytvorim si HTTO klienta a nastavim mu uvodni cast uri, u konkretnich Get, Post... volanich doplnim zbytek uri
+//Vytvorim si HTTP klienta a nastavim mu uvodni cast uri, u konkretnich Get, Post... volanich doplnim zbytek uri
 var client = new HttpClient();
 client.BaseAddress = new Uri("http://localhost:5293/api/");
 

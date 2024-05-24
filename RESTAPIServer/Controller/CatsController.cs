@@ -14,7 +14,7 @@ public class CatsController : ControllerBase
 
 
     //Vrati vsechny kocky
-    [HttpGet]
+    [HttpGet("")]
     public ActionResult<List<Cat>> Get()
     {        
         //Vrati http 200 s JSONem kocek v body
