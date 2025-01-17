@@ -10,7 +10,7 @@ mohou posílat zprávy, které Hub zpracovává.
 AddSignalR(): Tato metoda registruje služby SignalR potřebné pro fungování Hubs.
 
 MapHub<ChatHub>("/chatHub"): Tato metoda mapuje ChatHub na určitou URL, 
-v tomto případě /chatHub. Klienti použijí tuto URL pro připojení k Hubu. */
+v tomto případě /chatHub. Klienti použijí tuto URL pro připojení k Hubu.  */
 namespace SignalRServer;
 
 public class Program
