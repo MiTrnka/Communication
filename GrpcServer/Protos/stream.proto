@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "gRPCServer";
+
+package streaming;
+
+service StreamingService {
+  rpc StreamMessages(Empty) returns (stream StreamResponse);
+}
+
+message Empty {}
+
+message StreamResponse {
+  string message = 1;
+}
