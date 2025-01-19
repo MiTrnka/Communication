@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationRedis2", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console_IoCDI", "Console_IoCDI\Console_IoCDI.csproj", "{E4AAB45D-D86D-4CAB-9A63-617318A3087B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIBearerToken", "APIBearerToken\APIBearerToken.csproj", "{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
