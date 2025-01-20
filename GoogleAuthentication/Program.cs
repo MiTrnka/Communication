@@ -41,8 +41,8 @@ builder.Services.AddAuthentication(options =>
 .AddGoogle(googleOptions =>
 {
     // Získané z Google Cloud Console -> Credentials.
-    googleOptions.ClientId = "41785059141-kueuumhbnessjss3244qfes2nt30mdgu.apps.googleusercontent.com";
-    googleOptions.ClientSecret = "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";
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
     // URL, na kterou se Google vrátí po pøihlášení. Musí být shodná s tím, co máš v Google Cloud Console -> Credentials.
     googleOptions.CallbackPath = "/signin-google";
 
