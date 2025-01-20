@@ -1,0 +1,6 @@
+@GoogleAuthentication_HostAddress = http://localhost:5166
+
+GET {{GoogleAuthentication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
