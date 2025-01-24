@@ -14,8 +14,8 @@ public class CatsController : ControllerBase
 
 
     //Vrati vsechny kocky
-    [HttpGet("")]
-    public ActionResult<List<Cat>> Get()
+    [HttpGet]
+    public async Task<ActionResult<List<Cat>>> Get()
     {
         //Vrati http 200 s JSONem kocek v body
         return this.Ok(cats);
@@ -23,7 +23,7 @@ public class CatsController : ControllerBase
 
     //Vrati kocku dle Id (od nuly vcetne), pokud kocka s danym Id neni, vrati se 404
     [HttpGet("{Id:int:min(0)}")]
-    public ActionResult<Cat> Get(int Id)
+    public async Task<ActionResult<Cat>> Get(int Id)
     {
         var cat = cats.Find(c => c.Id == Id);
         if (cat == null) return this.NotFound(); //Vrátí http 404 bez kocky v body
@@ -34,7 +34,7 @@ public class CatsController : ControllerBase
 
     //Vytvori kocku
     [HttpPost]
-    public ActionResult<Cat> Post(Cat cat)
+    public async Task<ActionResult<Cat>> Post(Cat cat)
     {
         //Vrátí 400
         if (!this.ModelState.IsValid) return this.BadRequest();
@@ -46,8 +46,7 @@ public class CatsController : ControllerBase
 
     //Aktualizuje kocku
     [HttpPut("{Id:int:min(0)}")]
-    //asynchronni varianta: public async Task<IActionResult> Put(int Id, Cat updatedCat)
-    public IActionResult Put(int Id, Cat updatedCat)
+    public async Task<IActionResult> Put(int Id, Cat updatedCat)
     {
         var cat = cats.FirstOrDefault(c => c.Id == Id);
         if (cat == null) return this.NotFound(); //Vrátí http 404
@@ -64,7 +63,7 @@ public class CatsController : ControllerBase
 
     [HttpDelete("{Id:int}")]
     //asynchronni varianta public async Task<IActionResult> Delete(int Id)
-    public IActionResult Delete(int Id)
+    public async Task<IActionResult> Delete(int Id)
     {
         var cat = cats.FirstOrDefault(c => c.Id == Id);
         if (cat == null) return this.NoContent();

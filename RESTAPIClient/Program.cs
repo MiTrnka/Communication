@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 
 //Vytvorim si HTTP klienta a nastavim mu uvodni cast uri, u konkretnich Get, Post... volanich doplnim zbytek uri
-var client = new HttpClient();
+using var client = new HttpClient();
 client.BaseAddress = new Uri("http://localhost:5293/api/");
 //Post: Vytvoreni nove kocky s Id 10
 Console.WriteLine("Vytvoreni nove kocky s Id 10");

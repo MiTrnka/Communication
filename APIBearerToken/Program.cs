@@ -12,14 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.OpenApi;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Konfigurace JWT
-var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "SuperTajnyKlicProVyvojODelceAlespon32Bytu"; // Získání tajného klíèe z konfigurace nebo default
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "http://localhost:5041"; // Získání issuer z konfigurace nebo default
-var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "http://localhost:5041"; // Získání audience z konfigurace nebo default
+var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "SuperTajnyKlicProVyvojODelceAlespon32Bytu"; // Získání tajného klíèe
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "http://localhost:5041"; // Získání issuer
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "http://localhost:5041"; // Získání audience
 var jwtExpireMinutes = 10; // Nastavení expirace tokenu na 10 minut, menší hodnoty expirovaly stejnì pozdìji
 
 // Nastavení, že se má používat JWT Bearer authentication jako výchozí autentizaèní mechanismus v celé naší aplikaci a to tam, kde je [Authorize]
@@ -34,12 +34,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true, // Ovìøuje podpis tokenu
             ValidIssuer = jwtIssuer,        // Nastavení validního issuer
             ValidAudience = jwtAudience,     // Nastavení validní audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)) // Nastavuje tajný klíè pro ovìøení podpisu
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)) // Nastavuje tajný klíè pro ovìøení podpisu (SymmetricSecurityKey si z tokenu zjistí algoritmus, jakým byl podpis vytvoøen)
         };
     });
 
 // Nastavení autorizace (nutné pro [Authorize])
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "Admin");
+    });
+
+    options.AddPolicy("UserOnly", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "User");
+    });
+
+});
 
 // Pøidání služeb pro kontrolery
 builder.Services.AddControllers();
@@ -59,36 +73,33 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Mapování kontrolerù
-app.MapControllers();
-
 app.MapGet("/tokenAdmin", [AllowAnonymous] () =>
 {
     // Generování JWT tokenu
     var tokenHandler = new JwtSecurityTokenHandler();
-    var key = Encoding.ASCII.GetBytes(jwtSecret);
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
+    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Role, "Admin"), // Oficiální claim pro roli
+        new Claim("mujclaimproroli", "MujAdmin") // Nový vlastní claim pro roli
+    };
     var tokenDescriptor = new SecurityTokenDescriptor
     {
-        //Pole mnou definovaných atributù, které chci dostat do tokenu a pak je moci pøi autorizaci nìjak využít
-        Subject = new ClaimsIdentity(new[] {
-            new Claim("id", "123" /*Zde by místo náhodného èísla bylo napøíklad Id uživatele z databáze*/),
-            //new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin") // Musím pøed role dopsat http://schemas.microsoft.com/ws/2008/06/identity/claims/, protože to je defaultní namespace pro role, další jsou napøíklad name, emailaddress...
-            new Claim("mujclaimproroli", "Admin") // Nový claim pro roli
-        }), // Pøidání custom claimy
-        Expires = DateTime.UtcNow.AddMinutes(jwtExpireMinutes),    // Nastavení expirace tokenu
-        Issuer = jwtIssuer,               // Nastavení url vydavatele
-        Audience = jwtAudience,            // Nastavení url konzumenta
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) // Podpis tokenu
+        Issuer = jwtIssuer,
+        Audience = jwtAudience,
+        Subject = new ClaimsIdentity(claims),
+        Expires = DateTime.UtcNow.AddMinutes(jwtExpireMinutes),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)), SecurityAlgorithms.HmacSha256)
     };
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    var tokenString = tokenHandler.WriteToken(token);
 
-    return Results.Ok(new { Token = tokenString }); // Vrácení tokenu v JSON formátu
+    var token = tokenHandler.CreateToken(tokenDescriptor);
+    return tokenHandler.WriteToken(token);
 })
 .WithOpenApi(); // Generování OpenAPI pro /token
 
-// Endpoint chránìný tokenem
-app.MapGet("/datetime", [Authorize] (HttpContext context) =>
+// Endpoint chránìný tokenem a ète hodnotu claimu "mujclaimproroli"
+app.MapGet("/datetime1", [Authorize] (HttpContext context) =>
 {
     var claims = context.User.Claims;
 
@@ -96,13 +107,27 @@ app.MapGet("/datetime", [Authorize] (HttpContext context) =>
     var roleClaim = claims.FirstOrDefault(c => c.Type == "mujclaimproroli");
 
     // Kontrola, zda v tokenu je mujclaimproroli nastavena na "Admin"
-    if (roleClaim != null && roleClaim.Value == "Admin")
+    if (roleClaim != null && roleClaim.Value == "MujAdmin")
     {
         // Pokud se sem kód dostane, tak má uživatel validní token vèetnì claimu s rolí Admin
         return Results.Ok(new { DateTime = DateTime.Now });
     }
     // Pokud role není admin, tak vrátíme status code 403
     return Results.Forbid();
+})
+.WithOpenApi(); // Generování OpenAPI pro /datetime
+
+// Endpoint chránìný tokenem plus moje politika AdminOnly
+app.MapGet("/datetime2", [Authorize(Policy = "AdminOnly")] (HttpContext context) =>
+{
+    return Results.Ok(new { DateTime = DateTime.Now });
+})
+.WithOpenApi(); // Generování OpenAPI pro /datetime
+
+// Vypíše, zda je uživatel autentizován (pokud nedodám platný JWT token, tak vypíše false)
+app.MapGet("/identita", (HttpContext context) =>
+{
+    return Results.Ok(context.User.Identity.IsAuthenticated.ToString());
 })
 .WithOpenApi(); // Generování OpenAPI pro /datetime
 

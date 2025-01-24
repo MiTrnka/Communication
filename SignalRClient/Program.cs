@@ -4,9 +4,9 @@ NuGet balíček: Microsoft.AspNetCore.SignalR.Client
 Klientská aplikace si vytvoří spojení na server (instance connection třídy HubConnectionBuilder)
 Na této instanci si klient nastaví (pomocí connection.On...), které zprávy chce odebírat.
 Server tyto zprávy odesílá typicky s nějakými parametry, například:
-pro všechny klienty: await Clients.All.SendAsync("ReceiveMessage", user, message); 
+pro všechny klienty: await Clients.All.SendAsync("ReceiveMessage", user, message);
 nebo pro konkrétního: await Clients.Caller.SendAsync("ReceiveMessages", _messages);
-takže klient při nastavování toho odběru musí dodržet ty parametry, 
+takže klient při nastavování toho odběru musí dodržet ty parametry,
 ale co si s nimi udělá je už na něm a definuje si to pomocí lambda funkce.
 V této klientské aplikaci si klient zaregistroval odběr "ReceiveMessage",
 pomocí kterého si vypisuje hlášky od jiných klientů, které server rozesílá všem klientům
@@ -24,9 +24,9 @@ namespace SignalRClient
         static async Task Main(string[] args)
         {
             /*
-            SignalR klient v .NET je vytvořen pomocí HubConnectionBuilder, což je třída, 
+            SignalR klient v .NET je vytvořen pomocí HubConnectionBuilder, což je třída,
             která poskytuje fluidní API pro konfiguraci a vytvoření spojení s SignalR hubem na serveru.
-            WithUrl: Určuje URL adresu SignalR hubu na serveru. Tato URL musí odpovídat endpointu, 
+            WithUrl: Určuje URL adresu SignalR hubu na serveru. Tato URL musí odpovídat endpointu,
             který je nakonfigurován na serverové straně v MapHub<ChatHub>("/chatHub").
             Build(): Vytváří instanci HubConnection, která se používá pro komunikaci s hubem.
             */
@@ -39,6 +39,7 @@ namespace SignalRClient
                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                 };
             })
+            .WithAutomaticReconnect() //asi 4 pokusy o znovupřipojení
             .Build();
 
             //Takto si vyrobím metodu ReceivePrazdnaZprava (přihlásím se k odběru
@@ -50,18 +51,18 @@ namespace SignalRClient
                 Console.WriteLine("Zavolana ze serveru metoda ReceivePrazdnaZprava");
             });
             //Takto si zaregistruji obslužnou metodu ReceiveCislo pro příjem zpráv
-            //ze serveru, která bude mít 1 parametr            
+            //ze serveru, která bude mít 1 parametr
             connection.On<int>("ReceiveCislo", (cislo) =>
             {
                 Console.WriteLine($"Zavolana ze serveru metoda ReceiveCislo s parametrem {cislo}");
             });
 
             /*
-            Pro přijímání zpráv z hubu, klient registruje obslužné metody, které jsou volány, 
-            když server pošle zprávu klientovi. To se dělá pomocí metody On<T>, 
-            kde T je typ dat, který očekáváte, že budete přijímat.            
-            Lambda funkce (user, message) => { ... } je volána pokaždé, když server pošle zprávu 
-            prostřednictvím metody ReceiveMessage. 
+            Pro přijímání zpráv z hubu, klient registruje obslužné metody, které jsou volány,
+            když server pošle zprávu klientovi. To se dělá pomocí metody On<T>,
+            kde T je typ dat, který očekáváte, že budete přijímat.
+            Lambda funkce (user, message) => { ... } je volána pokaždé, když server pošle zprávu
+            prostřednictvím metody ReceiveMessage.
             */
             connection.On<string, string>("ReceiveMessage", (user, message) =>
             {

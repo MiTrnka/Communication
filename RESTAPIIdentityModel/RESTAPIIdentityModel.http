@@ -1,0 +1,6 @@
+@RESTAPIIdentityModel_HostAddress = http://localhost:5219
+
+GET {{RESTAPIIdentityModel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
