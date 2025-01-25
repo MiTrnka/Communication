@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIBearerToken", "APIBearer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleAuthentication", "GoogleAuthentication\GoogleAuthentication.csproj", "{D21F689F-1198-40DA-B15E-B40696B34491}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIIdentity", "APIIdentity\APIIdentity.csproj", "{3869A062-2208-4534-BBC2-50A8B9294355}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{D21F689F-1198-40DA-B15E-B40696B34491}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D21F689F-1198-40DA-B15E-B40696B34491}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D21F689F-1198-40DA-B15E-B40696B34491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3869A062-2208-4534-BBC2-50A8B9294355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3869A062-2208-4534-BBC2-50A8B9294355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3869A062-2208-4534-BBC2-50A8B9294355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3869A062-2208-4534-BBC2-50A8B9294355}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
