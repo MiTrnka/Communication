@@ -1,0 +1,6 @@
+@APIASPNETCoreIdentity_HostAddress = http://localhost:5125
+
+GET {{APIASPNETCoreIdentity_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

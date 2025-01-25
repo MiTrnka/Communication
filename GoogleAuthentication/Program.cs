@@ -190,7 +190,7 @@ app.MapGet("/refresh-token", [Authorize] async (HttpContext context) => {
     return newAccessToken;
 });
 
-// chránìný endpoint, pokud nejsem pøihlášen, vyvojá se pøihlášení (options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;) a pak dojde k pøesmìrování zpìt sem
+// chránìný endpoint, pokud nejsem pøihlášen, vyvolá se pøihlášení (options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;) a pak dojde k pøesmìrování zpìt sem
 app.MapGet("/a", [Authorize] async (HttpContext context) => {
         // Získání tokenù (zde v aplikaci je dále nevyužívám, ale do budoucna bych mohl)
         var result = await context.AuthenticateAsync();
