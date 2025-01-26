@@ -41,6 +41,8 @@ public class UsersController : ControllerBase
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {
+        //Získání emailu z přihlášeného uživatele, User je vlastnost z ControllerBase
+        //obsahuje informace o přihlášeném uživateli extrahované z tokenu. ASP.NET Core ji automaticky naplní z Authorization hlavičky (místo tokenu by to mohlo být třeba autorizační cookie...)
         var email = User.FindFirstValue(ClaimTypes.Email);
         var user = await _userManager.FindByEmailAsync(email);
 
@@ -62,6 +64,8 @@ public class UsersController : ControllerBase
     [HttpPut("profile")]
     public async Task<IActionResult> UpdateProfile(UpdateProfileModel model)
     {
+        //Získání emailu z přihlášeného uživatele, User je vlastnost z ControllerBase
+        //obsahuje informace o přihlášeném uživateli extrahované z tokenu. ASP.NET Core ji automaticky naplní z Authorization hlavičky (místo tokenu by to mohlo být třeba autorizační cookie...)
         var email = User.FindFirstValue(ClaimTypes.Email);
         var user = await _userManager.FindByEmailAsync(email);
 

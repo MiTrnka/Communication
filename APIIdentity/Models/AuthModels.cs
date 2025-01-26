@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// DTO - objekty slouží pro transfer dat mezi klientem (PostMan, aplikace...) a API
+using System.ComponentModel.DataAnnotations;
 
 namespace APIIdentity.Models;
 

@@ -56,6 +56,7 @@ public class AuthController : ControllerBase
         return BadRequest(new { errors = result.Errors });
     }
 
+    //Zkontroluje zadaný email a heslo a vytvoří JWT token
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginModel model)
     {
@@ -65,6 +66,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
         }
 
+        //Metoda ověří heslo a provede přihlášení (false zde znamená, že se nezamkne účet při špatném hesle)
         var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
         if (result.Succeeded)
         {
@@ -86,7 +88,11 @@ public class AuthController : ControllerBase
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
+
+                //Používá se pro sledování a případné zneplatnění konkrétních tokenů, momentálně není využito
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+                // Obsahuje ID uživatele z databáze, momentálně není využito
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id)
             };
 
