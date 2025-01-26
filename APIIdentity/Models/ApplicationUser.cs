@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿// Rozšiřuje standardní identitu o FirstName, LastName, Created
+using Microsoft.AspNetCore.Identity;
 
 namespace APIIdentity.Models;
 

@@ -1,4 +1,7 @@
-﻿using APIIdentity.Models;
+﻿// Inicializace základních dat
+// Vytváří role: Admin, Moderator, User
+// Vytváří výchozí admin účet
+using APIIdentity.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace APIIdentity.Data;

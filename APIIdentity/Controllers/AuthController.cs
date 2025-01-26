@@ -1,4 +1,5 @@
-﻿using APIIdentity.Models;
+﻿//Volně přístupný controller pro registraci a přihlášení uživatele s JWT autentizací. V produkci je nutné přidat validaci vstupů, odesílání potvrzovacího emailu, logování událostí a další bezpečnostní opatření.
+using APIIdentity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -84,9 +85,9 @@ public class AuthController : ControllerBase
     {
         var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id)
             };
 
         // Přidání rolí do claims

@@ -1,8 +1,11 @@
-﻿using APIIdentity.Models;
+﻿// Controller vyžadující autentizaci (zda je token ok a neexpirovaný) a autorizaci, poskytuje endpointy pro získání seznamu uživatelů, získání profilu uživatele, aktualizaci profilu a změnu hesla
+using APIIdentity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace APIIdentity.Controllers;
 
@@ -38,11 +41,10 @@ public class UsersController : ControllerBase
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound();
-        }
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null) return NotFound();
 
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -60,13 +62,11 @@ public class UsersController : ControllerBase
     [HttpPut("profile")]
     public async Task<IActionResult> UpdateProfile(UpdateProfileModel model)
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound();
-        }
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _userManager.FindByEmailAsync(email);
 
-        // V produkci přidat validaci vstupů
+        if (user == null) return NotFound();
+
         user.FirstName = model.FirstName;
         user.LastName = model.LastName;
 
@@ -82,22 +82,19 @@ public class UsersController : ControllerBase
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return NotFound();
-        }
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null) return NotFound();
 
         var result = await _userManager.ChangePasswordAsync(
-            user, model.CurrentPassword, model.NewPassword);
+            user,
+            model.CurrentPassword,
+            model.NewPassword
+        );
 
         if (result.Succeeded)
         {
-            // V produkci přidat:
-            // - Odeslání notifikačního emailu
-            // - Logování změny
-            // - Vynucení nového přihlášení
-
             return Ok(new { message = "Password changed successfully" });
         }
 
