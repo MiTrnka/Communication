@@ -40,8 +40,8 @@ public class CatsController : ControllerBase
         if (!this.ModelState.IsValid) return this.BadRequest();
 
         cats.Add(cat);
-        //Vrati http 201, v hlavicce url bude url na toto API a v těle bude json prave zalozena kocky
-        return this.CreatedAtAction(nameof(this.Post), cat);
+        //Vrati http 201, v hlavicce url bude url na Get API na právě vloženou kočku a v těle bude json prave zalozené kočky
+        return this.CreatedAtAction(nameof(Get), new { Id = cat.Id }, cat);
     }
 
     //Aktualizuje kocku, async je zde zbytečný, ale pro výuku...
