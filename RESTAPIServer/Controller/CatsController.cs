@@ -15,13 +15,13 @@ public class CatsController : ControllerBase
 
     //Vrati vsechny kocky
     [HttpGet]
-    public async Task<ActionResult<List<Cat>>> Get()
+    public ActionResult<List<Cat>> Get()
     {
         //Vrati http 200 s JSONem kocek v body
         return this.Ok(cats);
     }
 
-    //Vrati kocku dle Id (od nuly vcetne), pokud kocka s danym Id neni, vrati se 404
+    //Vrati kocku dle Id (od nuly vcetne), pokud kocka s danym Id neni, vrati se 404, async je zde zbytečný, ale pro výuku...
     [HttpGet("{Id:int:min(0)}")]
     public async Task<ActionResult<Cat>> Get(int Id)
     {
@@ -32,7 +32,7 @@ public class CatsController : ControllerBase
         return this.Ok(cat);
     }
 
-    //Vytvori kocku
+    //Vytvori kocku, async je zde zbytečný, ale pro výuku...
     [HttpPost]
     public async Task<ActionResult<Cat>> Post(Cat cat)
     {
@@ -44,7 +44,7 @@ public class CatsController : ControllerBase
         return this.CreatedAtAction(nameof(this.Post), cat);
     }
 
-    //Aktualizuje kocku
+    //Aktualizuje kocku, async je zde zbytečný, ale pro výuku...
     [HttpPut("{Id:int:min(0)}")]
     public async Task<IActionResult> Put(int Id, Cat updatedCat)
     {
@@ -62,7 +62,7 @@ public class CatsController : ControllerBase
 
 
     [HttpDelete("{Id:int}")]
-    //asynchronni varianta public async Task<IActionResult> Delete(int Id)
+    //Smaže kočku dle Id, async je zde zbytečný, ale pro výuku...
     public async Task<IActionResult> Delete(int Id)
     {
         var cat = cats.FirstOrDefault(c => c.Id == Id);
