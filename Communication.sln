@@ -25,8 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQLClient", "GraphQLCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationRedis", "WebApplicationRedis\WebApplicationRedis.csproj", "{8A3FEE1F-E6F5-4A95-AE02-E66AD1479915}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationRedis2", "WebApplicationRedis2\WebApplicationRedis2.csproj", "{35BF0CFD-B8BF-4492-B04C-1BE2A226C9AA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console_IoCDI", "Console_IoCDI\Console_IoCDI.csproj", "{E4AAB45D-D86D-4CAB-9A63-617318A3087B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIBearerToken", "APIBearerToken\APIBearerToken.csproj", "{B3A084EB-1BAC-4558-81D8-66BC2EF1C133}"
@@ -34,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleAuthentication", "GoogleAuthentication\GoogleAuthentication.csproj", "{D21F689F-1198-40DA-B15E-B40696B34491}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIIdentity", "APIIdentity\APIIdentity.csproj", "{3869A062-2208-4534-BBC2-50A8B9294355}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppRedis", "ConsoleAppRedis\ConsoleAppRedis.csproj", "{E2EA874B-8A1D-4D92-B183-68C30296D84C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,10 +85,6 @@ Global
 		{8A3FEE1F-E6F5-4A95-AE02-E66AD1479915}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A3FEE1F-E6F5-4A95-AE02-E66AD1479915}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A3FEE1F-E6F5-4A95-AE02-E66AD1479915}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35BF0CFD-B8BF-4492-B04C-1BE2A226C9AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35BF0CFD-B8BF-4492-B04C-1BE2A226C9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35BF0CFD-B8BF-4492-B04C-1BE2A226C9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35BF0CFD-B8BF-4492-B04C-1BE2A226C9AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4AAB45D-D86D-4CAB-9A63-617318A3087B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,6 +101,10 @@ Global
 		{3869A062-2208-4534-BBC2-50A8B9294355}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3869A062-2208-4534-BBC2-50A8B9294355}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3869A062-2208-4534-BBC2-50A8B9294355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2EA874B-8A1D-4D92-B183-68C30296D84C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2EA874B-8A1D-4D92-B183-68C30296D84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2EA874B-8A1D-4D92-B183-68C30296D84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2EA874B-8A1D-4D92-B183-68C30296D84C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

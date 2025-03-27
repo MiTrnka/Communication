@@ -16,7 +16,7 @@ namespace WebApplicationRedis.Pages
 
         public void OnGet()
         {
-            _httpContextAccessor?.HttpContext?.Session.SetString("klic1","Hodnota1");
+            _httpContextAccessor?.HttpContext?.Session.SetString("klic1","Hodnota5");
         }
     }
 

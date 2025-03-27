@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 
 
 namespace WebApplicationRedis.Pages
@@ -8,13 +10,17 @@ namespace WebApplicationRedis.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IDistributedCache _cache; // Redis cache
+
         public string SessionValue { get; set; }
         public string CookieValue { get; set; }
+        public string VlastniHodnotaVRedis { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(ILogger<IndexModel> logger, IHttpContextAccessor httpContextAccessor, IDistributedCache cache)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
         }
 
         public void OnGet()
@@ -29,6 +35,8 @@ namespace WebApplicationRedis.Pages
             {
                 CookieValue = hodnota;
             }
+            _cache.SetString("klic40", "Kaptah"); // v redis bude uložena hodnota "Kaptah" pod klíèem "PrefixProNazevKlicekvuliKoliziMeziAPlikacemaklic40" a to jako typ hash
+            VlastniHodnotaVRedis = _cache.GetString("klic40") ?? "Klíè v Redis neexistuje"; // Naètení hodnoty z Redisu (je i async verze), zde prefix pro klic neuvadime, protoze se automaticky doplni
         }
     }
 }

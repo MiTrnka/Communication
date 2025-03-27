@@ -23,16 +23,16 @@ public class Program
 {
     static void Main(string[] args)
     {
-        /* //Vypíše v obou případech stejný Guid
-        ServiceCollection serviceCollection = new ServiceCollection();
+         //Vypíše v obou případech stejný Guid
+        /*ServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection.AddScoped<Aplikace>();
         serviceCollection.AddTransient<Notifikace>();
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
         var aplikace1 = serviceProvider.GetService<Aplikace>();
         var aplikace2 = serviceProvider.GetService<Aplikace>();
         aplikace1.Vypis();
-        aplikace2.Vypis();
-        */
+        aplikace2.Vypis();*/
+        
 
         //Vypíše již jiná Guid, protože služba Aplikace je vytvořena pro každý scope jiná
         /*ServiceCollection serviceCollection = new ServiceCollection();
