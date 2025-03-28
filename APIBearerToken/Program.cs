@@ -1,4 +1,4 @@
-/* Aplikace umí na endpointu /token vygenerovat bearer token ve formátu JWT
+/* Aplikace umí na endpointu /tokenAdmin vygenerovat bearer token ve formátu JWT
 Následnì ten token validuje (vložen v http jako hlavièka Authorization s hodnotou Bearer mezera a pak ten token)*/
 
 //NuGet package: Microsoft.AspNetCore.Authentication.JwtBearer
