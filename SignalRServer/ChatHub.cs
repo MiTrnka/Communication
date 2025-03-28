@@ -3,7 +3,7 @@ namespace SignalRServer;
 
 /*
 Třída ChatHub dědí od Hub. To ji činí centrálním bodem pro komunikaci v SignalR.
-List<string> _messages: Statická proměnná pro uchování historie zpráv. 
+List<string> _messages: Statická proměnná pro uchování historie zpráv.
 */
 public class ChatHub : Hub
 {
@@ -16,7 +16,7 @@ public class ChatHub : Hub
     //Seznam všech zpráv
     private static readonly List<string> _messages = new List<string>();
 
-    /*Tato přepsaná metoda se volá, když se klient připojí k Hubu. 
+    /*Tato přepsaná metoda se volá, když se klient připojí k Hubu.
     Používá se k odeslání historie zpráv právě připojenému klientu.*/
     public override async Task OnConnectedAsync()
     {
@@ -29,15 +29,15 @@ public class ChatHub : Hub
         await base.OnConnectedAsync();
     }
 
-    //Tato přepsaná metoda se volá, když se klient odpojí od Hubu    
+    //Tato přepsaná metoda se volá, když se klient odpojí od Hubu
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         // Zde můžete provést potřebné úklidové operace
         await base.OnDisconnectedAsync(exception);
     }
 
-    /*Metoda, kterou klienti volají, když chtějí odeslat zprávu. 
-    Zpráva je přidána do seznamu _messages a následně odeslána všem připojeným klientům 
+    /*Metoda, kterou klienti volají, když chtějí odeslat zprávu.
+    Zpráva je přidána do seznamu _messages a následně odeslána všem připojeným klientům
     pomocí Clients.All.SendAsync()*/
     public async Task SendMessage(string user, string message)
     {
@@ -50,13 +50,13 @@ public class ChatHub : Hub
 
         //Volám dvakrát testovací obslužnou metodu zaregistrovanou na klientovi
         await Clients.All.SendAsync("ReceivePrazdnaZprava");
-        await Clients.All.SendAsync("ReceivePrazdnaZprava");
+        await Clients.AllExcept(Context.ConnectionId).SendAsync("ReceivePrazdnaZprava"); // Vyjme volajícího
 
         //Na klientovi musí sedět parametry metody, jinak se metoda
         //neprovede a vyvolá se výjimka na klientovi
         await Clients.All.SendAsync("ReceiveCislo", 42);
 
-        /* Níže jsou způsoby, jak poslat zprávu jen určitým klientům 
+        /* Níže jsou způsoby, jak poslat zprávu jen určitým klientům
         await Clients.Group("groupName").SendAsync("ReceivePrazdnaZprava");
         await Clients.Client(connectionId).SendAsync("ReceivePrazdnaZprava");
         await Clients.AllExcept(new List<string> { connectionId }).SendAsync("ReceivePrazdnaZprava");*/

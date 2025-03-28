@@ -30,7 +30,7 @@ namespace SignalRClient
             který je nakonfigurován na serverové straně v MapHub<ChatHub>("/chatHub").
             Build(): Vytváří instanci HubConnection, která se používá pro komunikaci s hubem.
             */
-            var connection = new HubConnectionBuilder()
+            await using var connection = new HubConnectionBuilder()
             .WithUrl("http://localhost:5214/chatHub", options =>
             {
                 options.HttpMessageHandlerFactory = _ => new HttpClientHandler
@@ -61,8 +61,7 @@ namespace SignalRClient
             Pro přijímání zpráv z hubu, klient registruje obslužné metody, které jsou volány,
             když server pošle zprávu klientovi. To se dělá pomocí metody On<T>,
             kde T je typ dat, který očekáváte, že budete přijímat.
-            Lambda funkce (user, message) => { ... } je volána pokaždé, když server pošle zprávu
-            prostřednictvím metody ReceiveMessage.
+            Lambda funkce (user, message) => { ... } je volána pokaždé, když server pošle zprávu ReceiveMessage.
             */
             connection.On<string, string>("ReceiveMessage", (user, message) =>
             {
