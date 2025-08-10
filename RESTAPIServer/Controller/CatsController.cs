@@ -48,11 +48,11 @@ public class CatsController : ControllerBase
     [HttpPut("{Id:int:min(0)}")]
     public async Task<IActionResult> Put(int Id, Cat updatedCat)
     {
-        var cat = cats.FirstOrDefault(c => c.Id == Id);
-        if (cat == null) return this.NotFound(); //Vrátí http 404
-
         //Vrátí 400
         if (!this.ModelState.IsValid) return this.BadRequest();
+
+        var cat = cats.FirstOrDefault(c => c.Id == Id);
+        if (cat == null) return this.NotFound(); //Vrátí http 404
 
         cat.Name = updatedCat.Name;
 
