@@ -16,7 +16,7 @@ public class Person
     public List<Car> Cars { get; set; } = new();
 }
 
-// Tøída reprezentující auto - ZÙSTÁVÁ BEZE ZMÌNY
+// Tøída reprezentující auto
 public class Car
 {
     public int Id { get; set; }
@@ -26,7 +26,7 @@ public class Car
     public int OwnerId { get; set; }
 }
 
-// Služba pro práci s daty - ZDE JSOU DÙLEŽITÉ ZMÌNY
+// Služba pro práci s daty
 public class PersonService
 {
     // Interní úložištì zùstávají stejná
@@ -43,32 +43,26 @@ public class PersonService
         new Car { Id = 3, Make = "Toyota", Model = "Corolla", Year = 2020, OwnerId = 2 }
     };
 
-    // --- ZMÌNA #1: ZJEDNODUŠENÍ METOD ---
-    // Tato metoda nyní vrací POUZE seznam osob. Logiku pro naèítání aut jsme odstranili,
-    // protože o tu se postará specializovaný resolver, a to jen v pøípadì, že si klient o auta øekne.
-    public IEnumerable<Person> GetAll()
+    // Tato metoda vrací POUZE seznam osob. Logiku pro naèítání aut bude na vyžádání øešit specializovaný resolver
+    // a to jen v pøípadì, že klient dotazu skuteènì vyžádá pole 'cars'.
+    public IEnumerable<Person> GetAllPeople()
     {
-        Console.WriteLine("PersonService.GetAll: Vracím pouze seznam osob.");
         return _people;
     }
 
     // Stejnì tak tato metoda vrací jen základní data o jedné osobì.
-    public Person? GetById(int id)
+    public Person? GetPersonById(int id)
     {
-        Console.WriteLine($"PersonService.GetById({id}): Vracím pouze data pro osobu s ID {id}.");
         return _people.FirstOrDefault(p => p.Id == id);
     }
 
-    // --- NOVÁ SPECIÁLNÍ METODA ---
-    // Pøidali jsme malou, jednoúèelovou metodu, která umí jen jednu vìc:
-    // najít auta pro dané ID vlastníka. Tuto metodu bude volat náš car resolver.
+    // Najde auta pro dané ID vlastníka. Tuto metodu bude volat náš car resolver.
     public IEnumerable<Car> GetCarsByOwnerId(int ownerId)
     {
-        Console.WriteLine($"PersonService.GetCarsByOwnerId({ownerId}): Hledám auta pro vlastníka s ID {ownerId}.");
         return _cars.Where(car => car.OwnerId == ownerId);
     }
 
-    // Metoda AddPerson zùstává v principu stejná, pøidá data do "databáze".
+    // Pøidá osobu s jejími auty do interního úložištì.
     public Person AddPerson(Person person)
     {
         person.Id = _people.Max(p => p.Id) + 1;
@@ -83,10 +77,11 @@ public class PersonService
     }
 }
 
-// --- ZMÌNA #2: PØIDÁNÍ TØÍDY S RESOLVERY ---
-// Tato nová tøída obsahuje "specialisty" (resolvery), kteøí rozšiøují náš základní typ Person.
+// --- TØÍDA S RESOLVERY ---
+// Tato tøída obsahuje "specialisty" (resolvery), kteøí rozšiøují náš základní typ Person.
 // Atribut [ExtendObjectType] øíká Hot Chocolate: "Metody v této tøídì pøidávají pole nebo logiku
 // k GraphQL typu 'Person', který byl pùvodnì vytvoøen z C# tøídy Person."
+// Název samotné tøídy PersonResolvers je konvence, ale není povinný.
 [ExtendObjectType(typeof(Person))]
 public class PersonResolvers
 {
@@ -94,7 +89,7 @@ public class PersonResolvers
     // Tato metoda se spustí POKAŽDÉ, když si klient v dotazu vyžádá pole 'cars' u objektu Person.
     // Název metody 'GetCars' je konvence (Get + název property) a právì ten suffix Cars definuje, že se má pro cars spustit tato metoda (resolver).
     // Mohl bych ale na místo této konvence použít atribut [GraphQLName("cars")] a pojmenovat pak metodu jakkoliv.
-    public IEnumerable<Car> GetCars([Parent] Person person, [Service] PersonService service)
+    public IEnumerable<Car> GetCars([Parent] Person person, [Service] PersonService service /*pro efektivnejsi resolver injektujeme na místo PersonService svùj DataLoader, který zamezí N+1 problému*/)
     {
         // [Parent] Person person: Toto je klíèové. Hot Chocolate nám sem automaticky pøedá instanci
         // "rodièovského" objektu, tedy té konkrétní osoby, pro kterou právì øešíme její auta.
@@ -127,10 +122,10 @@ public class Query
     [UseFiltering]
     [UseSorting]
     [GraphQLName("GetPeople")]
-    public IEnumerable<Person> GetPeople() => _personService.GetAll();
+    public IEnumerable<Person> GetPeople() => _personService.GetAllPeople();
 
     [GraphQLName("GetPersonById")]
-    public Person? GetPersonById(int id) => _personService.GetById(id);
+    public Person? GetPersonById(int id) => _personService.GetPersonById(id);
 }
 
 // Vstupní typ pro auto a mutaèní tøída - ZÙSTÁVAJÍ BEZE ZMÌNY
@@ -173,7 +168,6 @@ public class Program
             .AddGraphQLServer()
             .AddQueryType<Query>()
             .AddMutationType<Mutation>()
-            // --- ZMÌNA #3: REGISTRACE RESOLVERÙ ---
             // Tímto øádkem øíkáme GraphQL serveru: "Až budeš sestavovat schéma,
             // podívej se také do tøídy PersonResolvers a použij její metody
             // k rozšíøení typu Person." Bez tohoto øádku by server o našich
